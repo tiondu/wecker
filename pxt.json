@@ -20,7 +20,7 @@
         "branch": "v6.0.28",
         "tag": "v6.0.28",
         "commits": "https://github.com/microsoft/pxt-calliope/commits/0de6e9a3947686a88380ad08ae6ee4c926ca5b19",
-        "target": "6.0.28",
+        "target": "6.0.41",
         "pxt": "9.0.15",
         "targetId": "calliopemini"
     },
