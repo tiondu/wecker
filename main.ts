@@ -13,6 +13,7 @@ input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
     } else {
         Weckzeit_Minute = convertToText(DS1307.getMinute())
     }
+    lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 0, 0, 15, lcd16x2rgb.lcd16x2_text("Wecker klingelt"))
     lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 1, 0, 15, "um " + Weckzeit_Stunde + ":" + Weckzeit_Minute + " Uhr")
 })
 input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
@@ -36,7 +37,7 @@ input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
         Weckzeit_Stunde = convertToText(Schlummern_Stunde)
     }
     lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 0, 0, 15, lcd16x2rgb.lcd16x2_text("Schlummern"))
-    lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 1, 0, 15, "bis" + Weckzeit_Stunde + ":" + Weckzeit_Minute + " Uhr")
+    lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 1, 0, 15, "bis " + Weckzeit_Stunde + ":" + Weckzeit_Minute + " Uhr")
 })
 let Minuten = ""
 let Stunden = ""
@@ -48,8 +49,8 @@ let Weckzeit_Stunde = ""
 Weckzeit_Stunde = bit.bit_text("leer")
 Weckzeit_Minute = bit.bit_text("leer")
 lcd16x2rgb.initLCD(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2))
-lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 0, 0, 15, lcd16x2rgb.lcd16x2_text("Jonathans"))
-lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 1, 0, 15, lcd16x2rgb.lcd16x2_text("Wecker"))
+lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 0, 0, 15, lcd16x2rgb.lcd16x2_text("Jonathans Wecker"))
+lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 1, 0, 15, lcd16x2rgb.lcd16x2_text(""))
 let _4digit = grove.createDisplay(DigitalPin.C16, DigitalPin.C17)
 _4digit.point(true)
 basic.forever(function () {
