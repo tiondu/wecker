@@ -1,4 +1,5 @@
 input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
+    Taster_blau = bit.bit_text("aus")
     Weckzeit_Berechnung = DS1307.getHour() + 10
     if (Weckzeit_Berechnung >= 24) {
         Weckzeit_Berechnung = Weckzeit_Berechnung - 24
@@ -52,10 +53,12 @@ let Schlummern_Minute = 0
 let Taster_rot = ""
 let Alarm = ""
 let Weckzeit_Berechnung = 0
+let Taster_blau = ""
 let Weckzeit_Minute = ""
 let Weckzeit_Stunde = ""
 Weckzeit_Stunde = bit.bit_text("leer")
 Weckzeit_Minute = bit.bit_text("leer")
+Taster_blau = bit.bit_text("blinken")
 lcd16x2rgb.initLCD(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2))
 lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 0, 0, 15, lcd16x2rgb.lcd16x2_text("Jonathans Wecker"))
 lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 1, 0, 15, lcd16x2rgb.lcd16x2_text(""))
@@ -81,6 +84,7 @@ basic.forever(function () {
         }
         if (Taster_rot != "an") {
             Taster_rot = bit.bit_text("aus")
+            Taster_blau = bit.bit_text("an")
         }
         Alarm = bit.bit_text("aus")
         music.play(music.createSoundExpression(
@@ -115,6 +119,19 @@ basic.forever(function () {
         basic.pause(60000)
     }
     control.waitMicros(6000)
+})
+basic.forever(function () {
+    while (Taster_blau == "blinken") {
+        pins.analogWritePin(AnalogPin.P1, 1023)
+        basic.pause(500)
+        pins.analogWritePin(AnalogPin.P1, 0)
+        basic.pause(500)
+    }
+    if (Taster_blau == "an") {
+        pins.analogWritePin(AnalogPin.P1, 1023)
+    } else {
+        pins.analogWritePin(AnalogPin.P1, 0)
+    }
 })
 basic.forever(function () {
     while (Taster_rot == "blinken") {
