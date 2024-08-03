@@ -16,7 +16,13 @@ input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
     lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 0, 0, 15, lcd16x2rgb.lcd16x2_text("Wecker klingelt"))
     lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 1, 0, 15, "um " + Weckzeit_Stunde + ":" + Weckzeit_Minute + " Uhr")
 })
+input.onButtonEvent(Button.AB, input.buttonEventClick(), function () {
+    Alarm = bit.bit_text("stop")
+    Taster_rot = bit.bit_text("aus")
+})
 input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
+    Alarm = bit.bit_text("stop")
+    Taster_rot = bit.bit_text("an")
     Schlummern_Minute = DS1307.getMinute() + 5
     Schlummern_Stunde = DS1307.getHour()
     if (Schlummern_Minute >= 60) {
@@ -43,6 +49,8 @@ let Minuten = ""
 let Stunden = ""
 let Schlummern_Stunde = 0
 let Schlummern_Minute = 0
+let Taster_rot = ""
+let Alarm = ""
 let Weckzeit_Berechnung = 0
 let Weckzeit_Minute = ""
 let Weckzeit_Stunde = ""
@@ -53,6 +61,40 @@ lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 0,
 lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 1, 0, 15, lcd16x2rgb.lcd16x2_text(""))
 let _4digit = grove.createDisplay(DigitalPin.C16, DigitalPin.C17)
 _4digit.point(true)
+basic.forever(function () {
+    while (Alarm == "abspielen") {
+        Taster_rot = bit.bit_text("blinken")
+        for (let index = 0; index < 24; index++) {
+            music.play(music.createSoundExpression(
+            WaveShape.Triangle,
+            680,
+            3944,
+            255,
+            255,
+            2000,
+            SoundExpressionEffect.Vibrato,
+            InterpolationCurve.Curve
+            ), music.PlaybackMode.UntilDone)
+            if (Alarm != "abspielen") {
+                break;
+            }
+        }
+        if (Taster_rot != "an") {
+            Taster_rot = bit.bit_text("aus")
+        }
+        Alarm = bit.bit_text("aus")
+        music.play(music.createSoundExpression(
+        WaveShape.Triangle,
+        3944,
+        680,
+        255,
+        255,
+        2000,
+        SoundExpressionEffect.Vibrato,
+        InterpolationCurve.Curve
+        ), music.PlaybackMode.UntilDone)
+    }
+})
 basic.forever(function () {
     if (DS1307.getHour() < 10) {
         Stunden = "0" + DS1307.getHour()
@@ -68,9 +110,22 @@ basic.forever(function () {
     if (Stunden == Weckzeit_Stunde && Minuten == Weckzeit_Minute) {
         lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 0, 0, 15, lcd16x2rgb.lcd16x2_text("Jonathan"))
         lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 1, 0, 15, lcd16x2rgb.lcd16x2_text("aufstehen!"))
-        for (let index = 0; index < 24; index++) {
-            music.play(music.stringPlayable("C D E F G A B C5 ", 140), music.PlaybackMode.UntilDone)
-        }
+        Taster_rot = bit.bit_text("aus")
+        Alarm = bit.bit_text("abspielen")
+        basic.pause(60000)
     }
     control.waitMicros(6000)
+})
+basic.forever(function () {
+    while (Taster_rot == "blinken") {
+        pins.analogWritePin(AnalogPin.P2, 1023)
+        basic.pause(500)
+        pins.analogWritePin(AnalogPin.P2, 0)
+        basic.pause(500)
+    }
+    if (Taster_rot == "an") {
+        pins.analogWritePin(AnalogPin.P2, 1023)
+    } else {
+        pins.analogWritePin(AnalogPin.P2, 0)
+    }
 })
