@@ -1,5 +1,6 @@
 input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
     Taster_blau = bit.bit_text("aus")
+    Taster_rot = bit.bit_text("aus")
     Weckzeit_Berechnung = DS1307.getHour() + 10
     if (Weckzeit_Berechnung >= 24) {
         Weckzeit_Berechnung = Weckzeit_Berechnung - 24
@@ -20,10 +21,16 @@ input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
 input.onButtonEvent(Button.AB, input.buttonEventClick(), function () {
     Alarm = bit.bit_text("stop")
     Taster_rot = bit.bit_text("aus")
+    Taster_blau = bit.bit_text("aus")
+    Weckzeit_Stunde = bit.bit_text("leer")
+    Weckzeit_Minute = bit.bit_text("leer")
+    lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 0, 0, 15, lcd16x2rgb.lcd16x2_text("Jonathans Wecker"))
+    lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2), 1, 0, 15, lcd16x2rgb.lcd16x2_text(""))
 })
 input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
     Alarm = bit.bit_text("stop")
     Taster_rot = bit.bit_text("an")
+    Taster_blau = bit.bit_text("aus")
     Schlummern_Minute = DS1307.getMinute() + 5
     Schlummern_Stunde = DS1307.getHour()
     if (Schlummern_Minute >= 60) {
@@ -50,9 +57,9 @@ let Minuten = ""
 let Stunden = ""
 let Schlummern_Stunde = 0
 let Schlummern_Minute = 0
-let Taster_rot = ""
 let Alarm = ""
 let Weckzeit_Berechnung = 0
+let Taster_rot = ""
 let Taster_blau = ""
 let Weckzeit_Minute = ""
 let Weckzeit_Stunde = ""
